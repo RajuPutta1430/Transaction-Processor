@@ -125,8 +125,27 @@ result, load tests, and failure-injection tests against a real database.
 
 ## 10. How AI was used and how the output was checked
 
+**Where I used AI.** I used Claude (Anthropic) as a pair-programming assistant. I used it to
+analyse the assessment document, propose the architecture, generate the first version of the
+code and the test suite, and draft this document. The decisions below are ones I reviewed and
+can explain:  GLOBAL sequence scope by default,releasing the sequence slot of rejected records, 
+idempotent ledger as a second line of defence
 
-- AI assisted with: <for developing the framework and script, test ideas.>.
-- Validation: I read every class, ran `mvn test`, ran the sample file by hand and compared it with
-  the expected table, and tried my own edge cases
+**What I chose myself.** I chose Java with Maven and TestNG because that is my core automation
+stack. I asked the recruiter to confirm that this backend assessment was the intended one for
+the SDET role before starting. 
 
+**How I validated the generated code.**
+1. I ran `mvn clean test` on my own machine. The first run failed because Maven defaulted to an
+   old compiler plugin that targeted Java 1.5. I fixed it by pinning `maven-compiler-plugin`
+   3.13.0 with `release 17`. After that, all 32 tests pass.
+2. I ran the application on the assessment's sample data and compared the output with the
+   expected table: ACC-201 ends at 85.00, TXN-2002 is reported as a duplicate, TXN-2004 is
+   rejected, TXN-2005 is retried once.
+3. I read each class and traced the main flow by hand: validate, idempotency check, sequence
+   gate, retry loop, ledger apply.
+
+
+**Limits of AI-generated code I kept in mind.** Generated tests can pass while missing
+scenarios, so I added my own cases. The design is simple on purpose (in-memory, single writer),
+and section 9 lists what production would need.
