@@ -1,0 +1,39 @@
+05:01:34.032 INFO    event=PENDING txnId=TXN-2002 requestId=REQ-2 detail=waiting for an earlier sequence, seq=2
+05:01:34.098 INFO    event=PROCESSED txnId=TXN-2001 requestId=REQ-1 detail=applied attempts=1
+05:01:34.099 INFO    event=PROCESSED txnId=TXN-2002 requestId=REQ-2 detail=applied attempts=1
+05:01:34.101 INFO    event=DUPLICATE txnId=TXN-2002 requestId=REQ-2-DUP detail=original is PROCESSED
+05:01:34.104 INFO    event=PROCESSED txnId=TXN-2003 requestId=REQ-3 detail=applied attempts=1
+05:01:34.105 WARNING event=FAILED txnId=TXN-2004 requestId=REQ-4 detail=VALIDATION_FAILED [amount must be greater than zero]
+05:01:34.106 INFO    event=RETRY_PENDING txnId=TXN-2005 requestId=REQ-5 detail=transient failure on attempt 1
+05:01:34.207 INFO    event=PROCESSED txnId=TXN-2005 requestId=REQ-5 detail=applied attempts=2
+
+=== Transaction Processing Report ===
+Inputs received      : 6
+Unique transactions  : 4
+Retry attempts       : 1
+
+-- Summary by status --
+RECEIVED      : 0
+PENDING       : 0
+PROCESSING    : 0
+RETRY_PENDING : 0
+PROCESSED     : 4
+DUPLICATE     : 1
+FAILED        : 1
+
+-- Transactions --
+TXN-2002   PROCESSED  attempts=1 duplicates=1
+TXN-2001   PROCESSED  attempts=1 duplicates=0
+TXN-2003   PROCESSED  attempts=1 duplicates=0
+TXN-2005   PROCESSED  attempts=2 duplicates=0
+
+-- Rejected at ingestion (dead-letter) --
+line 6 txn=TXN-2004 reason=VALIDATION_FAILED [amount must be greater than zero]
+
+-- Unresolved sequence gaps --
+none
+
+-- Balances --
+***201    : 85.00
+***203    : 500.00
+
