@@ -1,0 +1,7 @@
+<suite name="Transaction Processor Suite" verbose="1">
+    <test name="All tests">
+        <packages>
+            <package name="com.assessment.txn"/>
+        </packages>
+    </test>
+</suite>
